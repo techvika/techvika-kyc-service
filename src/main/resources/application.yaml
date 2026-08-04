@@ -1,0 +1,28 @@
+server:
+  port: ${SERVER_PORT:8081}
+
+spring:
+  application:
+    name: techvika-kyc-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/techvika_kyc_db_local
+    username: postgres
+    password: techvika
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    show-extensions: true
+    display-request-duration: true
+  api-docs:
+    path: /v3/api-docs
+  packages-to-scan: com.techvika.kyc.restcontroller
+  paths-to-match: /api/**

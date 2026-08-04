@@ -1,0 +1,42 @@
+package com.techvika.kyc.service.impl;
+
+import com.techvika.kyc.dto.KycRequest;
+import com.techvika.kyc.dto.KycResponse;
+import com.techvika.kyc.entity.KycDetails;
+import com.techvika.kyc.exception.DuplicatePanException;
+import com.techvika.kyc.mapper.KycMapper;
+import com.techvika.kyc.repository.KycRepository;
+import com.techvika.kyc.service.KycService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.XSlf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class KycServiceImpl implements KycService {
+
+    private final KycRepository kycRepository;
+    private final KycMapper kycMapper;
+
+    @Override
+    public KycResponse submitKyc(KycRequest kycRequest) {
+        // Check if PAN already exists
+        if (kycRepository.findByPanNumber(kycRequest.getPanNumber()).isPresent()) {
+            throw new DuplicatePanException("PAN number already exists in the system");
+        }
+
+        // Convert request to entity
+        KycDetails kycDetails = kycMapper.toEntity(kycRequest);
+
+        // Save to database
+        KycDetails savedKycDetails = kycRepository.save(kycDetails);
+        log.info("KycDetails saved successfully {}", savedKycDetails);
+
+        // Convert to response
+        return kycMapper.toResponse(savedKycDetails);
+    }
+}
