@@ -2,6 +2,7 @@ package com.techvika.kyc.restcontroller;
 
 import com.techvika.kyc.dto.KycRequest;
 import com.techvika.kyc.dto.KycResponse;
+import com.techvika.kyc.service.KycService;
 import com.techvika.kyc.service.impl.KycServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "KYC Management", description = "APIs for KYC (Know Your Customer) operations")
 public class KycRestController {
 
-    private final KycServiceImpl kycService;
+    private final KycService kycService;
 
     @PostMapping
     @Operation(summary = "Submit KYC details", description = "Submit KYC details for a user with PAN number validation")
