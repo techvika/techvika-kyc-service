@@ -9,13 +9,15 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "kyc_details")
+@Table
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class KycDetails {
+public class Kyc {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "kycSeqGenerator")

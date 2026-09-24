@@ -20,11 +20,14 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/api/kyc")
-@RequiredArgsConstructor
 @Tag(name = "KYC Management", description = "APIs for KYC (Know Your Customer) operations")
 public class KycRestController {
 
     private final KycService kycService;
+
+    public KycRestController(KycService kycService) {
+        this.kycService = kycService;
+    }
 
     @PostMapping
     @Operation(summary = "Submit KYC details", description = "Submit KYC details for a user with PAN number validation")
@@ -33,11 +36,12 @@ public class KycRestController {
                     content = @Content(schema = @Schema(implementation = KycResponse.class))),
             @ApiResponse(responseCode = "400", description = "Invalid KYC request - validation failed"),
             @ApiResponse(responseCode = "409", description = "Duplicate PAN number"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
+            @ApiResponse(responseCode = "500", description = "Internal server error")})
     public ResponseEntity<KycResponse> submitKyc(@Valid @RequestBody KycRequest kycRequest) {
+        log.info("KYC Service Invoked............");
         KycResponse response = kycService.submitKyc(kycRequest);
         log.info("KycResponse submitted successfully {}", response);
+
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }
