@@ -2,9 +2,11 @@ package com.techvika.kyc.restcontroller;
 
 import com.techvika.kyc.dto.KycRequest;
 import com.techvika.kyc.dto.KycResponse;
+import com.techvika.kyc.entity.Kyc;
 import com.techvika.kyc.service.KycService;
 import com.techvika.kyc.service.impl.KycServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -43,5 +47,15 @@ public class KycRestController {
         log.info("KycResponse submitted successfully {}", response);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<KycResponse> getUserById(
+            @Parameter(description = "KYC ID") @PathVariable Long id) {
+        log.info("KYC Service Invoked and Pan Number fetched...");
+        Optional<KycResponse> user = kycService.getKycById(id);
+
+        return user.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

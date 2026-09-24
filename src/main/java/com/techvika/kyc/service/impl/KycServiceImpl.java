@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -37,5 +39,11 @@ public class KycServiceImpl implements KycService {
 
         // Convert to response
         return kycMapper.toKycResponse(savedKycDetails);
+    }
+
+    @Override
+    public Optional<KycResponse> getKycById(Long id) {
+        return kycRepository.findByUserId(id)
+                .map(kycMapper::toKycResponse);
     }
 }
